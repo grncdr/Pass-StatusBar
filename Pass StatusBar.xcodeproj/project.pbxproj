@@ -11,9 +11,11 @@
 		DC2EC34C16B1E87B008CB483 /* MacRuby.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC2EC34B16B1E87B008CB483 /* MacRuby.framework */; };
 		DC2EC35516B1E87B008CB483 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = DC2EC35316B1E87B008CB483 /* InfoPlist.strings */; };
 		DC2EC35716B1E87B008CB483 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = DC2EC35616B1E87B008CB483 /* main.m */; };
-		DC2EC35C16B1E87C008CB483 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = DC2EC35A16B1E87C008CB483 /* MainMenu.xib */; };
 		DC2EC35F16B1E87C008CB483 /* rb_main.rb in Resources */ = {isa = PBXBuildFile; fileRef = DC2EC35E16B1E87C008CB483 /* rb_main.rb */; };
-		DC2EC36116B1E87C008CB483 /* AppDelegate.rb in Resources */ = {isa = PBXBuildFile; fileRef = DC2EC36016B1E87C008CB483 /* AppDelegate.rb */; };
+		DC2EC36116B1E87C008CB483 /* StatusBarItemController.rb in Resources */ = {isa = PBXBuildFile; fileRef = DC2EC36016B1E87C008CB483 /* StatusBarItemController.rb */; };
+		DC2EC36D16B1EEAB008CB483 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = DC2EC36C16B1EEAB008CB483 /* icon.png */; };
+		DC2EC36F16B22870008CB483 /* Password.rb in Resources */ = {isa = PBXBuildFile; fileRef = DC2EC36E16B22870008CB483 /* Password.rb */; };
+		DC2EC37116B44EFA008CB483 /* SelectStore.xib in Resources */ = {isa = PBXBuildFile; fileRef = DC2EC37016B44EFA008CB483 /* SelectStore.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,9 +36,11 @@
 		DC2EC35416B1E87B008CB483 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		DC2EC35616B1E87B008CB483 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		DC2EC35816B1E87B008CB483 /* Pass StatusBar-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Pass StatusBar-Prefix.pch"; sourceTree = "<group>"; };
-		DC2EC35B16B1E87C008CB483 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		DC2EC35E16B1E87C008CB483 /* rb_main.rb */ = {isa = PBXFileReference; lastKnownFileType = text.script.ruby; path = rb_main.rb; sourceTree = "<group>"; };
-		DC2EC36016B1E87C008CB483 /* AppDelegate.rb */ = {isa = PBXFileReference; lastKnownFileType = text.script.ruby; path = AppDelegate.rb; sourceTree = "<group>"; };
+		DC2EC36016B1E87C008CB483 /* StatusBarItemController.rb */ = {isa = PBXFileReference; lastKnownFileType = text.script.ruby; path = StatusBarItemController.rb; sourceTree = "<group>"; };
+		DC2EC36C16B1EEAB008CB483 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
+		DC2EC36E16B22870008CB483 /* Password.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = Password.rb; sourceTree = "<group>"; };
+		DC2EC37016B44EFA008CB483 /* SelectStore.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SelectStore.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,7 +85,8 @@
 		DC2EC35016B1E87B008CB483 /* Pass StatusBar */ = {
 			isa = PBXGroup;
 			children = (
-				DC2EC36016B1E87C008CB483 /* AppDelegate.rb */,
+				DC2EC36016B1E87C008CB483 /* StatusBarItemController.rb */,
+				DC2EC36E16B22870008CB483 /* Password.rb */,
 				DC2EC35916B1E87C008CB483 /* Resources */,
 				DC2EC35D16B1E87C008CB483 /* Other Sources */,
 				DC2EC35116B1E87B008CB483 /* Supporting Files */,
@@ -103,7 +108,8 @@
 		DC2EC35916B1E87C008CB483 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				DC2EC35A16B1E87C008CB483 /* MainMenu.xib */,
+				DC2EC36C16B1EEAB008CB483 /* icon.png */,
+				DC2EC37016B44EFA008CB483 /* SelectStore.xib */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -121,11 +127,12 @@
 /* Begin PBXLegacyTarget section */
 		DC2EC34D16B1E87B008CB483 /* Deployment */ = {
 			isa = PBXLegacyTarget;
-			buildArgumentsString = "--compile --embed";
+			buildArgumentsString = "--compile --embed --gem gpgme";
 			buildConfigurationList = DC2EC36716B1E87C008CB483 /* Build configuration list for PBXLegacyTarget "Deployment" */;
 			buildPhases = (
 			);
 			buildToolPath = /usr/local/bin/macruby_deploy;
+			buildWorkingDirectory = "";
 			dependencies = (
 				DC2EC34F16B1E87B008CB483 /* PBXTargetDependency */,
 			);
@@ -186,9 +193,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				DC2EC35516B1E87B008CB483 /* InfoPlist.strings in Resources */,
-				DC2EC35C16B1E87C008CB483 /* MainMenu.xib in Resources */,
 				DC2EC35F16B1E87C008CB483 /* rb_main.rb in Resources */,
-				DC2EC36116B1E87C008CB483 /* AppDelegate.rb in Resources */,
+				DC2EC36116B1E87C008CB483 /* StatusBarItemController.rb in Resources */,
+				DC2EC36D16B1EEAB008CB483 /* icon.png in Resources */,
+				DC2EC36F16B22870008CB483 /* Password.rb in Resources */,
+				DC2EC37116B44EFA008CB483 /* SelectStore.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -220,14 +229,6 @@
 				DC2EC35416B1E87B008CB483 /* en */,
 			);
 			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-		DC2EC35A16B1E87C008CB483 /* MainMenu.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				DC2EC35B16B1E87C008CB483 /* en */,
-			);
-			name = MainMenu.xib;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -288,9 +289,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = x86_64;
+				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SYSTEM_APPS_DIR)/Xcode.app/Contents/Developer/Library/Frameworks\"",
+					"/Library/Frameworks/**",
 				);
 				GCC_ENABLE_OBJC_GC = required;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -305,9 +308,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = x86_64;
+				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SYSTEM_APPS_DIR)/Xcode.app/Contents/Developer/Library/Frameworks\"",
+					"/Library/Frameworks/**",
 				);
 				GCC_ENABLE_OBJC_GC = required;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -321,12 +326,14 @@
 		DC2EC36816B1E87C008CB483 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
 			};
 			name = Debug;
 		};
 		DC2EC36916B1E87C008CB483 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
 			};
 			name = Release;
 		};

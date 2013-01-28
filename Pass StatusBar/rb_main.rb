@@ -20,4 +20,6 @@ Dir.glob(File.join(dir_path, '*.{rb,rbo}')).map { |x| File.basename(x, File.extn
 end
 
 # Starting the Cocoa main loop.
-NSApplicationMain(0, nil)
+app = NSApplication.sharedApplication
+StatusBarItemController.new
+app.run
