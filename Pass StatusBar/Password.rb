@@ -5,8 +5,26 @@
 #  Created by Stephen Sugden on 2013-01-24.
 #  Copyright 2013 Stephen Sugden. All rights reserved.
 #
+
+require 'securerandom'
+
 class Password
   
+  def self.generate(name, length, allowSymbols)
+    message = if allowSymbols then :urlsafe_base64 else :hex end
+    content = SecureRandom.send(message, length)
+    command = gpg2_command(' -e -o "' + fileForName(name) + '"', 'w')
+    command.write(content)
+  end
+
+  def self.gpg2_command(command, mode=nil)
+    IO.popen("#{gpg2_path} #{command} -r #{gpg_id} --quiet --yes --batch ", mode)
+  end
+
+  def self.gpg_id
+    File.open(store_dir + "/.gpg-id").readlines.first
+  end
+
   # Find the path to gpg2 and cache it on the class object
   def self.gpg2_path
     return @gpg2_path if @gpg2_path
@@ -27,13 +45,24 @@ class Password
     end
   end
 
-  def initialize(store_dir, filename)
-    @store_dir = store_dir
+  def self.store_dir
+    NSUserDefaults.standardUserDefaults["store_dir"]
+  end
+
+  def self.exists?(passwordName)
+    File.exists?(fileForName(passwordName))
+  end
+
+  def self.fileForName(passwordName)
+    store_dir + '/' + passwordName + '.gpg'
+  end
+
+  def initialize(filename)
     @filename = filename
   end
     
   def name
-    @name ||= @filename.gsub(@store_dir + '/', '').gsub /\.gpg$/, ''
+    @name ||= @filename.gsub(self.class.store_dir + '/', '').gsub /\.gpg$/, ''
   end
     
   def toClipboard(sender=nil)
@@ -44,6 +73,6 @@ class Password
   
   private
   def decrypt
-    IO.popen("#{self.class.gpg2_path} -d --batch --quiet #{@filename}").readlines.last.strip
+    self.class.gpg2_command('-d "' + @filename + '"').readlines.last.strip
   end
 end

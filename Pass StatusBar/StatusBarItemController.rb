@@ -6,10 +6,11 @@
 #  Copyright 2013 Stephen Sugden. All rights reserved.
 #
 framework 'Cocoa'
+require 'find'
 
 class StatusBarItemController
   attr_reader :store_dir
-  
+
   def initialize
     @status_item = NSStatusBar.systemStatusBar.statusItemWithLength(NSVariableStatusItemLength)
     @menu = NSMenu.new
@@ -20,11 +21,11 @@ class StatusBarItemController
     @status_item.image = icon
     defaults.registerDefaults store_dir: ENV['HOME'] + '/.password-store'
   end
-  
+
   def store_dir
     defaults["store_dir"]
   end
-  
+
   def choose_store_dir(sender)
     dialog = NSOpenPanel.openPanel
     dialog.canChooseFiles = false
@@ -36,59 +37,53 @@ class StatusBarItemController
       initMenu
     end
   end
-    
+
+  def generate_password(sender)
+    genController = GeneratePasswordController.new
+    genController.showWindow sender
+  end
+
   private
-  
+
   def defaults
     NSUserDefaults.standardUserDefaults
   end
-  
+
   def each_password
-    Find.find(store_dir).grep(/\.gpg$/).map do |p|
-      yield Password.new(store_dir, p)
+    Find.find(store_dir).grep(/\.gpg$/).map do |filename|
+      yield Password.new(filename)
     end
   end
 
   def show_menu(status_item_button)
     @menu.removeAllItems
     each_password do |pw|
-      pwItem = NSMenuItem.new
-      pwItem.title = pw.name
-      pwItem.action = 'toClipboard'
-      pwItem.target = pw
-      @menu.addItem pwItem
+      addMenuItem pw.name, action: 'toClipboard:', target: pw
     end
-    
+
     @menu.addItem NSMenuItem.separatorItem
-    @menu.addItem store_dir_item
+    addMenuItem store_dir.gsub(ENV['HOME'], '~'), enabled: false
     
-    @menu.addItem browse_item
+    if not File.directory?(defaults["store_dir"])
+      addMenuItem "Init password store", action: 'init_store_dir:'
+    else
+      addMenuItem "Change password store...", action: 'choose_store_dir:'
+      addMenuItem "Generate password...", action: 'generate_password:', target: self
+    end
+
     @menu.addItem NSMenuItem.separatorItem
-    @menu.addItem quit_item
+    addMenuItem "Quit", action: 'terminate:', target: NSApplication.sharedApplication
     @status_item.popUpStatusItemMenu @menu
   end
-  
-  def store_dir_item
-    item = NSMenuItem.new
-    item.title = store_dir.gsub(ENV['HOME'], '~')
-    item.enabled = false
-    item
-  end
 
-  def browse_item
+  def addMenuItem(title, props)
     item = NSMenuItem.new
-    item.title = "Change password store..."
-    item.action = 'choose_store_dir:'
-    item.target = self
-    item
-  end
-  
-  def quit_item
-    return @quit_item if @quit_item
-    @quit_item = NSMenuItem.new
-    @quit_item.title = 'Quit'
-    @quit_item.action = 'terminate:'
-    @quit_item.target = NSApplication.sharedApplication
-    @quit_item
+    item.title = title
+    item.enabled = props.fetch(:enabled, true)
+    if props.include?(:action)
+      item.action = props[:action]
+      item.target = props.fetch(:target, self)
+    end
+    @menu.addItem(item)
   end
 end
