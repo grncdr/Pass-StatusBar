@@ -20,23 +20,30 @@ class GeneratePasswordController < NSWindowController
     initWithWindowNibName "GeneratePassword"
   end
   
-  def enableGenerateButton
-    @passwordName.stringValue.length
-  end
-  
   def didClickCancel(sender)
     close
   end
   
   def didClickGenerate(sender)
-    if Password.exists?(passwordName.stringValue)
-      alert = NSAlert.alertWithMessageText "Password \"#{passwordName}\" already exists, would you like to replace it?",
-        defaultButton: "Replace", alternateButton: "Cancel", otherButton:nil, informativeTextWithFormat: ""
-      if alert.runModal == NSAlertAlternateReturn
-        return
-      end
+    if PasswordStore.exists?(passwordName.stringValue)
+			return unless shouldReplace?(passwordName.stringValue)
     end
-    Password.generate passwordName.stringValue, passwordLength.intValue, allowSymbols.state == NSOnState
+		PasswordStore.generate(
+			passwordName.stringValue,
+			passwordLength.intValue,
+			allowSymbols.state == NSOnState
+		)
     close
   end
+
+	def shouldReplace?(passwordName)
+		alert = NSAlert.alertWithMessageText(
+			"Password \"#{passwordName}\" already exists, would you like to replace it?",
+			defaultButton: "Replace",
+			alternateButton: "Cancel",
+			otherButton: nil,
+			informativeTextWithFormat: ""
+		)
+		alert.runModal == NSAlertDefaultReturn
+	end
 end

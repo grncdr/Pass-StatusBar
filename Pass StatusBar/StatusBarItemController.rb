@@ -5,11 +5,7 @@
 #  Created by Stephen Sugden on 2013-01-24.
 #  Copyright 2013 Stephen Sugden. All rights reserved.
 #
-framework 'Cocoa'
-require 'find'
-
 class StatusBarItemController
-  attr_reader :store_dir
 
   def initialize
     @status_item = NSStatusBar.systemStatusBar.statusItemWithLength(NSVariableStatusItemLength)
@@ -19,11 +15,6 @@ class StatusBarItemController
     icon = NSImage.imageNamed 'icon'
     icon.size = NSSize.new(16, 16)
     @status_item.image = icon
-    defaults.registerDefaults store_dir: ENV['HOME'] + '/.password-store'
-  end
-
-  def store_dir
-    defaults["store_dir"]
   end
 
   def choose_store_dir(sender)
@@ -33,9 +24,12 @@ class StatusBarItemController
     dialog.allowsMultipleSelection = false
     # show the dialog
     if dialog.runModalForDirectory(nil, file: nil) == NSOKButton
-      defaults["store_dir"] = dialog.filenames.first
-      initMenu
+			PasswordStore.store_dir = dialog.filenames.first
     end
+  end
+  
+  def open_store_dir(sender)
+    NSWorkspace.sharedWorkspace.openFile PasswordStore.store_dir
   end
 
   def generate_password(sender)
@@ -45,31 +39,22 @@ class StatusBarItemController
 
   private
 
-  def defaults
-    NSUserDefaults.standardUserDefaults
-  end
-
-  def each_password
-    Find.find(store_dir).grep(/\.gpg$/).map do |filename|
-      yield Password.new(filename)
-    end
-  end
-
   def show_menu(status_item_button)
     @menu.removeAllItems
-    each_password do |pw|
-      addMenuItem pw.name, action: 'toClipboard:', target: pw
+    
+    if PasswordStore.initialized?
+      PasswordStore.each do |pw|
+        addMenuItem pw.name, action: 'toClipboard:', target: pw
+      end
+
+      @menu.addItem NSMenuItem.separatorItem
+      addMenuItem "Open #{PasswordStore.store_dir.gsub(ENV['HOME'], '~')}", action: 'open_store_dir:'
+      addMenuItem "Generate password...", action: 'generate_password:'
+    else
+      addMenuItem "Init password store", action: 'init_store_dir:'
     end
 
-    @menu.addItem NSMenuItem.separatorItem
-    addMenuItem store_dir.gsub(ENV['HOME'], '~'), enabled: false
-    
-    if not File.directory?(defaults["store_dir"])
-      addMenuItem "Init password store", action: 'init_store_dir:'
-    else
-      addMenuItem "Change password store...", action: 'choose_store_dir:'
-      addMenuItem "Generate password...", action: 'generate_password:', target: self
-    end
+    addMenuItem "Choose password store...", action: 'choose_store_dir:'
 
     @menu.addItem NSMenuItem.separatorItem
     addMenuItem "Quit", action: 'terminate:', target: NSApplication.sharedApplication

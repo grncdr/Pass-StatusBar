@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		DC1A1B2E16C8778300B76475 /* PasswordStore.rb in Resources */ = {isa = PBXBuildFile; fileRef = DC1A1B2D16C8778300B76475 /* PasswordStore.rb */; };
 		DC2EC34A16B1E87B008CB483 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC2EC34916B1E87B008CB483 /* Cocoa.framework */; };
 		DC2EC35516B1E87B008CB483 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = DC2EC35316B1E87B008CB483 /* InfoPlist.strings */; };
 		DC2EC35716B1E87B008CB483 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = DC2EC35616B1E87B008CB483 /* main.m */; };
@@ -30,6 +31,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		DC1A1B2D16C8778300B76475 /* PasswordStore.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = PasswordStore.rb; sourceTree = "<group>"; };
 		DC2EC34516B1E87B008CB483 /* Pass StatusBar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Pass StatusBar.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DC2EC34916B1E87B008CB483 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		DC2EC35216B1E87B008CB483 /* Pass StatusBar-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Pass StatusBar-Info.plist"; sourceTree = "<group>"; };
@@ -90,6 +92,7 @@
 				DC2EC36016B1E87C008CB483 /* StatusBarItemController.rb */,
 				DC44059416B9081600224F3F /* GeneratePasswordController.rb */,
 				DC2EC36E16B22870008CB483 /* Password.rb */,
+				DC1A1B2D16C8778300B76475 /* PasswordStore.rb */,
 				DC2EC35916B1E87C008CB483 /* Resources */,
 				DC2EC35D16B1E87C008CB483 /* Other Sources */,
 				DC2EC35116B1E87B008CB483 /* Supporting Files */,
@@ -202,6 +205,7 @@
 				DC2EC36F16B22870008CB483 /* Password.rb in Resources */,
 				DC44059316B9070800224F3F /* GeneratePassword.xib in Resources */,
 				DC44059516B9081600224F3F /* GeneratePasswordController.rb in Resources */,
+				DC1A1B2E16C8778300B76475 /* PasswordStore.rb in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
